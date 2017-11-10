@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 添加扫描 -->
+<!--添加视图解析器 -->
+<!-- 这里是springmvc的核心配置文件 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+	<!-- mvc其实spring的一个模块，所以他的配置文件的标签和spring是类似的 -->
+	<!-- 设置扫描组件的包： -->
+	<context:component-scan base-package="com.lstop"/>
+	<!-- 配置映射解析器：如何将控制器返回的结果字符串，转换为一个物理的视图文件 -->
+	<!-- springmvc会自动帮助我们做页面的转发，我们需要告知jsp文件所存在的位置 -->
+	<bean id="internalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- /WEB-INF/views/ login .jsp -->
+
+
+</beans>
