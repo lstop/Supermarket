@@ -45,7 +45,7 @@
 		<property name="basePackage" value="com.lstop.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 	</bean>
-	
+
 	<tx:annotation-driven transaction-manager="txManager" />
 	<bean id="txManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -53,4 +53,33 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<import resource="shiro-spring.xml" />
+	<!-- 创建任务(作业)对象 -->
+	<bean id="myJob" class="com.lstop.test.MyJob"></bean>
+
+	<!-- 配置作业详情 -->
+	<bean id="jobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 注入作业对象 -->
+		<property name="targetObject" ref="myJob"></property>
+		<!-- 注入作业方法 -->
+		<property name="targetMethod" value="run"></property>
+	</bean>
+
+	<!-- 配置触发器：触发了什么条件就去执行作业 -->
+	<bean id="trigger1"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail"></property>
+		<!-- 配置出发的条件:每隔5秒执行一次作业,cron表达式 -->
+		<property name="cronExpression" value="0/5 * * * * ?"></property>
+	</bean>
+
+
+	<!-- 调度者： 对所有作业进行调度 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="trigger1" />
+			</list>
+		</property>
+	</bean>
 </beans>
